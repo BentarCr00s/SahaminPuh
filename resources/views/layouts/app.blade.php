@@ -14,7 +14,7 @@
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -31,13 +31,7 @@
                 {{ $slot }}
             </main>
 
-            <footer class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                        <p>&copy 2024 SahaminPuh.</p>
-                    </div>
-                </div>
-            </footer>
+            @include('layouts.footer')
         </div>
     </body>
 </html>

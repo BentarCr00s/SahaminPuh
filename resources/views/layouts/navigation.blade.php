@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <div class="navbar-collapse justify-content-center align-items-center d-flex d-lg-justify-content-between">
-            <a href="{{ route('index') }}" class="navbar-brand align-items-center">
-                <x-application-logo/>
+            <a href="{{ route('index') }}" class="navbar-brand">
+                <x-application-logo type="horizontal" size="10em"/>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -23,11 +23,6 @@
                 <li class="nav-item">
                     <x-nav-link :href="route('kalkulator')" :active="request()->routeIs('kalkulator')">
                         {{ __('Kalkulator') }}
-                    </x-nav-link>
-                </li>
-                <li class="nav-item">
-                    <x-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')">
-                        {{ __('Tentang') }}
                     </x-nav-link>
                 </li>
             </ul>

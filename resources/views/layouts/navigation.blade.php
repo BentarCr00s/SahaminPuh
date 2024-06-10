@@ -11,8 +11,8 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <x-nav-link :href="route('berita')" :active="request()->routeIs('berita')">
-                        {{ __('Berita') }}
+                    <x-nav-link :href="route('news')" :active="request()->routeIs('news')">
+                        {{ __('News') }}
                     </x-nav-link>
                 </li>
                 <li class="nav-item">

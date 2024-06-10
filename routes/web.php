@@ -9,7 +9,7 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::get('/berita', [NewsController::class, 'index'])->name('berita');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
 
 Route::get('/sahaminfo', function () {
     return view('sahaminfo');
@@ -36,5 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/news/{id}/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 require __DIR__.'/auth.php';

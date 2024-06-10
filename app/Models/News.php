@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class News extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['image', 'title', 'description', 'category_id', 'views', 'url'];
+    protected $fillable = ['id', 'image', 'title', 'description', 'category_id', 'views', 'url'];
+
 
     public function category()
     {
@@ -27,7 +30,7 @@ class News extends Model
                 foreach ($news as $item) {
                     $categories = [];
                     $titleWords = explode(' ', $item['title']); // Split title into words
-                    
+
                     $descriptionWords = explode(' ', $item['description']); // Split description into words
 
                     $allWords = array_merge($titleWords, $descriptionWords); // Combine title and description words

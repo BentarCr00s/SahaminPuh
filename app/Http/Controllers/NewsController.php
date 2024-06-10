@@ -14,6 +14,12 @@ class NewsController extends Controller
         $categories = Category::all();
         return view('news', compact('newsItems', 'categories'));
     }
+
+    public function show($id)
+    {
+        $news = News::findOrFail($id);
+        return view('news.show', compact('news'));
+    }
     // public function store(Request $request)
     // {
     //     // Validasi data yang diterima dari formulir

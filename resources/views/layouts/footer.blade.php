@@ -1,4 +1,4 @@
-<footer class="w-100 py-4 flex-shrink-0">
+<footer class="w-100 py-4 flex-shrink-0" style="border-top: 1px solid #d3d3d3;">
     <div class="container py-4">
         <div class="row gy-2 gx-0 justify-content-center">
             <div class="col-lg-4 col-md-6 text-center">

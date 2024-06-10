@@ -1,10 +1,8 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Berita') }}
-        </h2>
-    </x-slot>
+@php
+use Illuminate\Support\Str;
+@endphp
 
+<x-app-layout>
     <div class="py-12">
         <div class="container">
             <div class="card">
@@ -14,14 +12,16 @@
                         <h3 class="h5">{{ __('Berita Teratas') }}</h3>
                         @php
                             $topNews = App\Models\News::selectRaw('*, DENSE_RANK() OVER (ORDER BY views DESC) as `rank`')->get();
-                            $topNewsChunks = $topNews->chunk(3);
+
+                            $topNewsChunks = $topNews->take(9)->chunk(3);
+
                         @endphp
                         @foreach($topNewsChunks as $chunk)
                             <div class="d-flex flex-row flex-wrap justify-content-between">
                                 @foreach($chunk as $news)
-                                    <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
+                                    <a href="{{ url('news/' . $news->id . '/' . Str::slug($news->title)) }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
                                         <div class="row g-0">
-                                            <div class="col-md-4">
+                                            <div class="col-md-4 d-flex justify-content-center align-items-center">
                                                 <img src="{{ $news->image }}" class="img-fluid rounded-start" alt="{{ $news->title }}">
                                             </div>
                                             <div class="col-md-8">
@@ -42,9 +42,6 @@
                         <h3 class="h5">{{ __('Berita Pasar') }}</h3>
                         <div class="mb-8">
                             <div class="d-flex">
-                                @php
-                                    $NewsCategory = App\Models\News::where('category_id', null)->get();
-                                @endphp
                                 {{-- <button class="btn btn-outline-primary text-dark rounded-start rounded-end btn-category" data-category-id="null" style="margin-right: 10px; margin-bottom: 10px; padding: 5px 10px; border-color: white;" onmouseover="this.style.backgroundColor='#f0f3fa'" onmouseout="this.style.backgroundColor=''">{{ __('Semua') }}</button> --}}
                                 <x-button-card-category active="true" data-category-id="null">{{ __('Semua') }}</x-button-card-category>
                                 @foreach($categories as $category)
@@ -62,6 +59,7 @@
                                 //     exit;
                                 // }
                                 // $NewsCategory = App\Models\News::where('category_id', 2)->get(); // Assuming News model is used and contains the necessary data
+                                $NewsCategory = App\Models\News::where('category_id', 2)->get();
                                 $NewsCategoryChunks = $NewsCategory->take(9)->chunk(3);
                             @endphp
                             @foreach($NewsCategoryChunks as $chunk)
@@ -69,7 +67,7 @@
                                     @foreach($chunk as $news)
                                     <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
                                         <div class="row g-0">
-                                            <div class="col-md-4">
+                                            <div class="col-md-4 d-flex justify-content-center align-items-center">
                                                 <img src="{{ $news->image }}" class="img-fluid rounded-start" alt="{{ $news->title }}">
                                             </div>
                                             <div class="col-md-8">
@@ -97,7 +95,7 @@
                                 @foreach($chunk as $news)
                                 <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
                                     <div class="row g-0">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 d-flex justify-content-center align-items-center">
                                             <img src="{{ $news->image }}" class="img-fluid rounded-start" alt="{{ $news->title }}">
                                         </div>
                                         <div class="col-md-8">

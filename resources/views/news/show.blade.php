@@ -1,7 +1,9 @@
-<title>SahaminPuh | {{ $news->title }}</title>
+<head>
+    <title>SahaminPuh | {{ $news->title }}</title>
+</head>
 
 <x-app-layout>
-    <div class="py-12" style="margin: 20px;">
+    <div class="py-12">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
@@ -12,6 +14,10 @@
                                 <img src="{{ $news->image }}" class="img-fluid rounded" style="max-width: 75%;" alt="{{ $news->title }}">
                             </div>
                             <p class="card-text mt-4">{{ $news->description }}</p>
+                            <p class="card-text mt-4">
+                                {{ __('Sumber Berita: ') }}
+                                <a href="{{ $news->url }}" target="_blank">{{ $news->url }}</a>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -13,11 +13,10 @@
                             <div class="d-flex justify-content-center">
                                 <img src="{{ $news->image }}" class="img-fluid rounded" style="max-width: 75%;" alt="{{ $news->title }}">
                             </div>
-                            <p class="card-text mt-4">{{ $news->description }}</p>
-                            <p class="card-text mt-4">
-                                {{ __('Sumber Berita: ') }}
-                                <a href="{{ $news->url }}" target="_blank">{{ $news->url }}</a>
-                            </p>
+                            <div class="text-center mt-2">
+                                <small>Sumber gambar: <a href="{{ $news->image }}" target="_blank">{{ $news->image }}</a></small>
+                            </div>
+                            <p class="card-text mt-4">{{ $news->content }}</p>
                         </div>
                     </div>
                     <div class="card mt-4">
@@ -100,7 +99,7 @@
                                                 <div class="col-md-8">
                                                     <div class="card-body">
                                                         <h5 class="card-title">{{ $news->title }}</h5>
-                                                        <p class="card-text text-truncate">{{ $news->description }}</p>
+                                                        <p class="card-text text-truncate">{{ $news->content }}</p>
                                                     </div>
                                                 </div>
                                             </div>

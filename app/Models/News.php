@@ -13,8 +13,8 @@ class News extends Model
 
     protected $fillable = ['id','image', 'title', 'content', 'date', 'views'];
 
-    public function category()
+    public function comments()
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasMany(Comment::class);
     }
 }

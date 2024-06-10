@@ -28,7 +28,7 @@ class NewsController extends Controller
         }
 
         // Jika tidak ada berita di database, gunakan Http untuk mengambil data dari API
-        $url = 'https://api-sahamin-puh-final.vercel.app/news';
+        $url = env('API') . "/news";
         $response = Http::get($url);
 
         // Mengubah response menjadi array asosiatif

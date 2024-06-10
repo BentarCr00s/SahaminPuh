@@ -40,10 +40,8 @@
                             @csrf
                             <li><a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
-                                            this.closest('form').submit();">Log Out</a></li>
-                            <li><a class="dropdown-item" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                            this.closest('form').submit();">Log Out</a></li>
+                                            this.closest('form').submit();">Log Out</a>
+                            </li>
                         </form>
                     </ul>
                 </li>

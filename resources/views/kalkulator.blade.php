@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        
+
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -33,6 +33,13 @@
     </style>
     </head>
     <body>
+    <x-app-layout>
+    <x-slot name="header">
+
+        </h2>
+    </x-slot>
+</x-app-layout>
+
         <header id="main-header"></header>
         <main class="d-flex">
         <aside class="sidebar-menu-kalkulator">

@@ -3,7 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SecurePageController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\SahamInfoController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::get('/', function () {
     return view('index');
@@ -11,13 +14,8 @@ Route::get('/', function () {
 
 Route::get('/berita', [NewsController::class, 'index'])->name('berita');
 
-Route::get('/sahaminfo', function () {
-    return view('sahaminfo');
-})->name('sahaminfo');
+Route::get('/sahaminfo', [SahamInfoController::class, 'index'])->name('sahaminfo');
 
-Route::get('/kalkulator', function () {
-    return view('kalkulator');
-})->name('kalkulator');
 
 Route::get('/tentang', function () {
     return view('tentang');

@@ -1,9 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Berita') }}
         </h2>
-    </x-slot>
+    </x-slot> --}}
 
     <div class="py-12">
         <div class="container">
@@ -19,15 +19,22 @@
                         @foreach($topNewsChunks as $chunk)
                             <div class="d-flex flex-row flex-wrap justify-content-between">
                                 @foreach($chunk as $news)
-                                    <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
+                                    <a href="#" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
                                         <div class="row g-0">
-                                            <div class="col-md-4">
-                                                <img src="{{ $news->image }}" class="img-fluid rounded-start" alt="{{ $news->title }}">
+                                            <div class="card-body" style="font-size: 14px; padding-top: 0; padding-bottom: 0; padding-left: 21px; font-weight: 400; color: #808080;">
+                                                <p class="card-text">{{ \Carbon\Carbon::parse($news->created_at)->locale('id')->diffForHumans() }}</p> <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
+                                            </div>
+                                        </div>
+                                        <div class="row g-0">
+                                            <div class="col-md-4" style="height: 80px; padding-left: 24px; padding-top: 15px;">
+                                                <img src="{{ $news->image }}" class="img-fluid rounded" alt="{{ $news->title }}" style="width: 72px; height: 72px;">
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">{{ $news->title }}</h5>
-                                                    <p class="card-text text-truncate">{{ $news->description }}</p>
+                                                    <h5 class="card-title" style="font-size: 1.05rem;">{{ $news->title }}</h5>
+                                                    <p class="card-text text-truncate" style="font-size: 12px;">
+                                                        {{ trim(str_replace(['Bisnis.com, JAKARTA - ', 'Bisnis.com, JAKARTA -&nbsp;', 'Bisnis.com,&nbspJAKARTA - ;', 'Bisnis.com, JAKARTA&nbsp- ;','Bisnis.com,&nbspJAKARTA -&nbsp;'], '', $news->description)) }}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -42,47 +49,53 @@
                         <h3 class="h5">{{ __('Berita Pasar') }}</h3>
                         <div class="mb-8">
                             <div class="d-flex">
-                                @php
-                                    $NewsCategory = App\Models\News::where('category_id', null)->get();
-                                @endphp
                                 {{-- <button class="btn btn-outline-primary text-dark rounded-start rounded-end btn-category" data-category-id="null" style="margin-right: 10px; margin-bottom: 10px; padding: 5px 10px; border-color: white;" onmouseover="this.style.backgroundColor='#f0f3fa'" onmouseout="this.style.backgroundColor=''">{{ __('Semua') }}</button> --}}
-                                <x-button-card-category active="true" data-category-id="null">{{ __('Semua') }}</x-button-card-category>
+                                @php
+                                    $isActive = true;
+                                @endphp
+                                <x-button-card-category active="{{ $isActive }}" data-category-id="null">{{ __('Semua') }}</x-button-card-category>
+                                @php
+                                    $isActive = false;
+                                @endphp
                                 @foreach($categories as $category)
-                                    {{-- <button class="btn btn-outline-primary text-dark rounded-start rounded-end btn-category" data-category-id="{{ $category->id }}" style="margin-right: 10px; margin-bottom: 10px; padding: 5px 10px; border-color: white;" onmouseover="this.style.backgroundColor='#f0f3fa'" onmouseout="this.style.backgroundColor=''">{{ $category->name }}</button> --}}
-                                    <x-button-card-category active="false" data-category-id="{{ $category->id }}">{{ $category->name }}</x-button-card-category>
+                                    <x-button-card-category active="{{ $isActive }}" data-category-id="{{ $category->id }}">{{ $category->name }}</x-button-card-category>
+                                    @php
+                                        $isActive = false;
+                                    @endphp
                                 @endforeach
                             </div>
                         </div>
                         {{-- Konten News Card Berdasarkan Kategori --}}
-                            @php
-                                // $categoryId =;
-                                // $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : null;
-                                // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                                //     $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : null;
-                                //     exit;
-                                // }
-                                // $NewsCategory = App\Models\News::where('category_id', 2)->get(); // Assuming News model is used and contains the necessary data
-                                $NewsCategoryChunks = $NewsCategory->take(9)->chunk(3);
-                            @endphp
-                            @foreach($NewsCategoryChunks as $chunk)
-                                <div class="d-flex flex-row flex-wrap">
-                                    @foreach($chunk as $news)
-                                    <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
-                                        <div class="row g-0">
-                                            <div class="col-md-4">
-                                                <img src="{{ $news->image }}" class="img-fluid rounded-start" alt="{{ $news->title }}">
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{ $news->title }}</h5>
-                                                    <p class="card-text text-truncate">{{ $news->description }}</p>
-                                                </div>
+                        @php
+                            $NewsCategory = App\Models\News::where('category_id', $category->id)->get();
+                            $NewsCategoryChunks = $NewsCategory->take(9)->chunk(3);
+                        @endphp
+                        @foreach($NewsCategoryChunks as $chunk)
+                            <div class="d-flex flex-row flex-wrap">
+                                @foreach($chunk as $news)
+                                <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
+                                    <div class="row g-0">
+                                        <div class="card-body" style="font-size: 14px; padding-top: 0; padding-bottom: 0; padding-left: 21px; font-weight: 400; color: #808080;">
+                                            <p class="card-text">{{ \Carbon\Carbon::parse($news->created_at)->locale('id')->diffForHumans() }}</p> <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
+                                        </div>
+                                    </div>
+                                    <div class="row g-0">
+                                        <div class="col-md-4" style="height: 80px; padding-left: 24px; padding-top: 15px;">
+                                            <img src="{{ $news->image }}" class="img-fluid rounded" alt="{{ $news->title }}" style="width: 72px; height: 72px;">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title" style="font-size: 1.05rem;">{{ $news->title }}</h5>
+                                                <p class="card-text text-truncate" style="font-size: 12px;">
+                                                    {{ trim(str_replace(['Bisnis.com, JAKARTA - ', 'Bisnis.com, JAKARTA -&nbsp;', 'Bisnis.com,&nbspJAKARTA - ;', 'Bisnis.com, JAKARTA&nbsp- ;','Bisnis.com,&nbspJAKARTA -&nbsp;'], '', $news->description)) }}
+                                                </p>
                                             </div>
                                         </div>
-                                    </a>
-                                    @endforeach
-                                </div>
-                            @endforeach
+                                    </div>
+                                </a>
+                                @endforeach
+                            </div>
+                        @endforeach
                     </div>
 
                     <!-- Group: Berita Banking -->
@@ -97,13 +110,20 @@
                                 @foreach($chunk as $news)
                                 <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
                                     <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="{{ $news->image }}" class="img-fluid rounded-start" alt="{{ $news->title }}">
+                                        <div class="card-body" style="font-size: 14px; padding-top: 0; padding-bottom: 0; padding-left: 21px; font-weight: 400; color: #808080;">
+                                            <p class="card-text">{{ \Carbon\Carbon::parse($news->created_at)->locale('id')->diffForHumans() }}</p> <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
+                                        </div>
+                                    </div>
+                                    <div class="row g-0">
+                                        <div class="col-md-4" style="height: 80px; padding-left: 24px; padding-top: 15px;">
+                                            <img src="{{ $news->image }}" class="img-fluid rounded" alt="{{ $news->title }}" style="width: 72px; height: 72px;">
                                         </div>
                                         <div class="col-md-8">
                                             <div class="card-body">
-                                                <h5 class="card-title">{{ $news->title }}</h5>
-                                                <p class="card-text text-truncate">{{ $news->description }}</p>
+                                                <h5 class="card-title" style="font-size: 1.05rem;">{{ $news->title }}</h5>
+                                                <p class="card-text text-truncate" style="font-size: 12px;">
+                                                    {{ trim(str_replace(['Bisnis.com, JAKARTA - ', 'Bisnis.com, JAKARTA -&nbsp;', 'Bisnis.com,&nbspJAKARTA - ;', 'Bisnis.com, JAKARTA&nbsp- ;','Bisnis.com,&nbspJAKARTA -&nbsp;'], '', $news->description)) }}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

@@ -1,5 +1,6 @@
 @php
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 @endphp
 <x-app-layout>
     <div class="py-12">
@@ -10,8 +11,8 @@ use Illuminate\Support\Str;
                     <div class="mb-8" style="padding-top: 20px;">
                         <h3 class="h5" style="padding-bottom: 10px;">{{ __('Berita Teratas') }}</h3>
                         @php
-                            $topNews = App\Models\News::selectRaw('*, DENSE_RANK() OVER (ORDER BY views DESC) as `rank`')->get();
-                            $topNewsChunks = $topNews->take(9)->chunk(3);
+                            $topNews = DB::select('SELECT *, DENSE_RANK() OVER (ORDER BY views DESC) as `rank` FROM news');
+                            $topNewsChunks = collect($topNews)->take(9)->chunk(3);
                         @endphp
                         @foreach($topNewsChunks as $chunk)
                             <div class="d-flex flex-row flex-wrap justify-content-between">
@@ -45,8 +46,8 @@ use Illuminate\Support\Str;
                         <h3 class="h5" style="padding-bottom: 10px;">{{ __('Berita Terbaru') }}</h3>
                         {{-- Konten News Card --}}
                         @php
-                            $NewsCategory = App\Models\News::latest()->get();
-                            $NewsCategoryChunks = $NewsCategory->take(12)->chunk(3);
+                            $NewsCategory = DB::select('SELECT * FROM news ORDER BY date DESC');
+                            $NewsCategoryChunks = collect($NewsCategory)->take(12)->chunk(3);
                         @endphp
                         @foreach($NewsCategoryChunks as $chunk)
                             <div class="d-flex flex-row flex-wrap">
@@ -80,8 +81,8 @@ use Illuminate\Support\Str;
                         <h3 class="h5" style="padding-bottom: 10px;">{{ __('Berita Lainnya') }}</h3>
                         {{-- Konten News Card --}}
                         @php
-                            $NewsCategory = App\Models\News::inRandomOrder()->get();
-                            $NewsCategoryChunks = $NewsCategory->take(18)->chunk(3);
+                            $NewsCategory = DB::select('SELECT * FROM news ORDER BY RAND()');
+                            $NewsCategoryChunks = collect($NewsCategory)->take(18)->chunk(3);
                         @endphp
                         @foreach($NewsCategoryChunks as $chunk)
                             <div class="d-flex flex-row flex-wrap">

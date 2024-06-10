@@ -9,7 +9,7 @@
             </button>
         </div>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav gap-2">
                 <li class="nav-item">
                     <x-nav-link :href="route('news')" :active="request()->routeIs('news') || request()->is('news/*')">
                         {{ __('News') }}
@@ -35,7 +35,6 @@
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -46,12 +45,14 @@
                     </ul>
                 </li>
                 @else
-                <li class="nav-item">
-                    <a class="btn btn-light" href="{{ route('login') }}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-success" href="{{ route('register') }}">Register</a>
-                </li>
+                <div class="d-flex column justify-content-end gap-2">
+                    <form action="{{ route('login') }}" method="get">
+                        <button type="submit" class="btn btn-light">Login</button>
+                    </form>
+                    <form action="{{ route('register') }}" method="get">
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </form>
+                </div>
                 @endauth
             </ul>
         </div>

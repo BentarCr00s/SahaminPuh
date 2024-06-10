@@ -3,9 +3,17 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 @endphp
 <x-app-layout>
+    <div class="news-landing-header" style="margin-bottom: 5vh; margin-top: 9vh;">
+        <div class="title-container" style="color: #131722; display: grid; justify-items: center; margin: 0 auto; max-width: 960px; text-align: center;">
+            <h1 class="title-news" style="padding-bottom: 0; margin: 0; padding: 0; font-size: 56px; line-height: 56px;">Berita</h1>
+            <p class="description-title" style="padding-top: 1rem; margin: 0; font-size: 24px; line-height: 32px;">
+                Jangan lewatkan informasi terbaru secara global.
+            </p>
+        </div>
+    </div>
     <div class="py-12">
         <div class="container">
-            <div class="card">
+            <div class="card" style="border-color: white;">
                 <div class="card-body">
                     <!-- Group: Berita Teratas -->
                     <div class="mb-8" style="padding-top: 20px;">

@@ -8,8 +8,7 @@ class SahamInfoController extends Controller
 {
     public function index()
     {
-        $url = "https://api-sahamin-puh-final.vercel.app/saham-puh";
-
+        $url = env('API') . "/saham-puh";
         // Inisialisasi cURL
         $ch = curl_init();
 
@@ -34,3 +33,4 @@ class SahamInfoController extends Controller
         return view('sahaminfo', ['sahamInfo' => $data]);
     }
 }
+

@@ -19,9 +19,7 @@ class News extends Model
     public static function fetchAndStoreStockNews()
     {
         try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer a4b5d848-6af1-5e9f-3860-90f71504'
-            ])->get('https://api.goapi.io/stock/idx/news');
+            $response = Http::get('http://10.10.25.10:3000/news');
 
             if ($response->successful()) {
                 $news = $response->json();
@@ -29,6 +27,7 @@ class News extends Model
                 foreach ($news as $item) {
                     $categories = [];
                     $titleWords = explode(' ', $item['title']); // Split title into words
+                    
                     $descriptionWords = explode(' ', $item['description']); // Split description into words
 
                     $allWords = array_merge($titleWords, $descriptionWords); // Combine title and description words
@@ -42,12 +41,12 @@ class News extends Model
 
                     foreach ($categories as $categoryId) {
                         self::create([
-                            'image' => $item['image'],
+                            'image' => $item['imageSrc'],
                             'title' => $item['title'],
                             'description' => $item['description'],
                             'category_id' => $categoryId,
                             'views' => 0, // Set views to 0
-                            'url' => $item['url'], // Tambah value URL dari API
+                            'url' => $item['link'], // Tambah value URL dari API
                         ]);
                     }
                 }

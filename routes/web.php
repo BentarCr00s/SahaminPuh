@@ -9,7 +9,7 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::get('/berita', [NewsController::class, 'index'])->name('news');
+Route::get('/berita', [NewsController::class, 'index'])->name('berita');
 
 Route::get('/sahaminfo', function () {
     return view('sahaminfo');

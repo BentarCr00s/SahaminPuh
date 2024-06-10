@@ -14,4 +14,20 @@ class NewsController extends Controller
         $categories = Category::all();
         return view('news', compact('newsItems', 'categories'));
     }
+    // public function store(Request $request)
+    // {
+    //     // Validasi data yang diterima dari formulir
+    //     $validatedData = $request->validate([
+    //         'category_id' => 'required',
+    //         // tambahkan validasi lainnya sesuai kebutuhan
+    //     ]);
+
+    //     // Simpan data ke dalam database
+    //     $news = new News();
+    //     $news->category_id = $validatedData['category_id'];
+    //     // tambahkan atribut lainnya sesuai kebutuhan
+    //     $news->save();
+
+    //     // Redirect atau berikan respons sesuai kebutuhan
+    // }
 }

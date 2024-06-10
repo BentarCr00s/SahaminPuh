@@ -42,18 +42,26 @@
                         <h3 class="h5">{{ __('Berita Pasar') }}</h3>
                         <div class="mb-8">
                             <div class="d-flex">
-                                <button class="btn btn-primary text-white rounded-start rounded-end btn-category" data-category-id="null" style="margin-right: 10px; margin-bottom: 10px; padding: 5px 10px; border-color: white;" onmouseover="this.style.backgroundColor='#f0f3fa'" onmouseout="this.style.backgroundColor=''">{{ __('Semua') }}</button>
+                                @php
+                                    $NewsCategory = App\Models\News::where('category_id', null)->get();
+                                @endphp
+                                {{-- <button class="btn btn-outline-primary text-dark rounded-start rounded-end btn-category" data-category-id="null" style="margin-right: 10px; margin-bottom: 10px; padding: 5px 10px; border-color: white;" onmouseover="this.style.backgroundColor='#f0f3fa'" onmouseout="this.style.backgroundColor=''">{{ __('Semua') }}</button> --}}
+                                <x-button-card-category active="true" data-category-id="null">{{ __('Semua') }}</x-button-card-category>
                                 @foreach($categories as $category)
-                                    <button class="btn btn-outline-primary text-dark rounded-start rounded-end btn-category" data-category-id="{{ $category->id }}" style="margin-right: 10px; margin-bottom: 10px; padding: 5px 10px; border-color: white;" onmouseover="this.style.backgroundColor='#f0f3fa'" onmouseout="this.style.backgroundColor=''">{{ $category->name }}</button>
+                                    {{-- <button class="btn btn-outline-primary text-dark rounded-start rounded-end btn-category" data-category-id="{{ $category->id }}" style="margin-right: 10px; margin-bottom: 10px; padding: 5px 10px; border-color: white;" onmouseover="this.style.backgroundColor='#f0f3fa'" onmouseout="this.style.backgroundColor=''">{{ $category->name }}</button> --}}
+                                    <x-button-card-category active="false" data-category-id="{{ $category->id }}">{{ $category->name }}</x-button-card-category>
                                 @endforeach
                             </div>
                         </div>
+                        {{-- Konten News Card Berdasarkan Kategori --}}
                             @php
-                                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                                    $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : null;
-                                    exit;
-                                }
-                                $NewsCategory = App\Models\News::where('category_id', $categoryId)->get(); // Assuming News model is used and contains the necessary data
+                                // $categoryId =;
+                                // $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : null;
+                                // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                                //     $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : null;
+                                //     exit;
+                                // }
+                                // $NewsCategory = App\Models\News::where('category_id', 2)->get(); // Assuming News model is used and contains the necessary data
                                 $NewsCategoryChunks = $NewsCategory->take(9)->chunk(3);
                             @endphp
                             @foreach($NewsCategoryChunks as $chunk)
@@ -116,17 +124,19 @@
             categoryButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const categoryId = this.dataset.categoryId;
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', window.location.href, true); // Mengirim ke halaman yang sama
-                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    xhr.onload = function() {
-                        if (xhr.status >= 200 && xhr.status < 300) {
-                            console.log(xhr.responseText); // Menampilkan respons dari PHP
-                        } else {
-                            console.error('Request failed with status: ' + xhr.status);
-                        }
-                    };
-                    xhr.send('categoryId=' + categoryId);
+                    console.log(categoryId);
+
+                    // const xhr = new XMLHttpRequest();
+                    // xhr.open('POST', window.location.href, true); // Mengirim ke halaman yang sama
+                    // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    // xhr.onload = function() {
+                    //     if (xhr.status >= 200 && xhr.status < 300) {
+                    //         console.log(xhr.responseText); // Menampilkan respons dari PHP
+                    //     } else {
+                    //         console.error('Request failed with status: ' + xhr.status);
+                    //     }
+                    // };
+                    // xhr.send('categoryId=' + categoryId);
                 });
             });
         });

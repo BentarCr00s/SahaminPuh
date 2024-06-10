@@ -3,107 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use DateTime;
 
 class NewsController extends Controller
 {
     public function index()
     {
-        // $this->fetchNews();
-
-        $newsItems = News::with('category')->get();
-        $categories = Category::all();
-        return view('news', compact('newsItems', 'categories'));
+        return $this->fetchNews();
     }
-    // News Card Category
-    // public function store(Request $request)
-    // {
-    //     // Validasi data yang diterima dari formulir
-    //     $validatedData = $request->validate([
-    //         'category_id' => 'required',
-    //         // tambahkan validasi lainnya sesuai kebutuhan
-    //     ]);
 
-    //     // Simpan data ke dalam database
-    //     $news = new News();
-    //     $news->category_id = $validatedData['category_id'];
-    //     // tambahkan atribut lainnya sesuai kebutuhan
-    //     $news->save();
+    public function fetchNews()
+    {
+        // Ambil berita dari database terlebih dahulu
+        $newsFromDB = News::all();
 
-    //     // Redirect atau berikan respons sesuai kebutuhan
-    // }
-    // public function fetchNews()
-    // {
-    //     try {
-    //         $response = Http::get('https://api-sahamin-puh-final.vercel.app/news');
-    //         $newsData = $response->json();
+        // Render berita yang diambil dari database
+        if ($newsFromDB->isNotEmpty()) {
+            return view('news', ['news' => $newsFromDB]);
+        }
 
-    //         if ($response->successful()) {
-    //             $news = $response->json();
+        // Jika tidak ada berita di database, gunakan Http untuk mengambil data dari API
+        $url = 'https://api-sahamin-puh-final.vercel.app/news';
+        $response = Http::get($url);
 
-    //             foreach ($news as $item) {
-    //                 $categories = [];
-    //                 $titleWords = explode(' ', $item['title']); // Split title into words
+        // Mengubah response menjadi array asosiatif
+        $newsData = $response->json();
 
-    //                 $descriptionWords = explode(' ', $item['content']); // Split description into words
+        // Cek apakah tabel 'news' ada di database
+        if (Schema::hasTable('news')) {
+            // Simpan berita yang diambil dari API ke database
+            foreach ($newsData as $newsItem) {
+                // Cek apakah berita sudah ada di database berdasarkan judul atau kriteria unik lainnya
+                $existingNews = News::where('title', $newsItem['title'])->first();
+                if (!$existingNews) {
+                    // Format tanggal
+                    $dateString = $newsItem['date']; // Contoh: "Senin,10Juni2024|14:36"
+                    $dateTime = DateTime::createFromFormat('l,dF Y|H:i', $dateString);
 
-    //                 $allWords = array_merge($titleWords, $descriptionWords); // Combine title and description words
+                    if ($dateTime) {
+                        $formattedDate = $dateTime->format('Y-m-d H:i:s');
+                    } else {
+                        // Jika format tanggal tidak sesuai, gunakan tanggal saat ini sebagai fallback
+                        $formattedDate = now();
+                    }
 
-    //                 foreach ($allWords as $word) {
-    //                     $category = Category::where('name', 'like', '%' . $word . '%')->first(); // Find category based on word
-    //                     if ($category) {
-    //                         $categories[] = $category->id;
-    //                     }
-    //                 }
-    //                 $newsToInsert = [];
-    //                 foreach ($categories as $categoryId) {
-    //                     $newsToInsert[] = [
-    //                         'image' => $item['imageUrl'],
-    //                         'title' => $item['title'],
-    //                         'description' => $item['content'],
-    //                         'category_id' => $categoryId,
-    //                         'views' => 0, // Set views to 0
-    //                         'created_at' => $item['date'],
-    //                     ];
-    //                 }
-    //                 DB::table('news')->insert($newsToInsert);
-    //             }
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching and storing stock news: ' . $e->getMessage());
-    //     }
+                    News::create([
+                        'title' => $newsItem['title'],
+                        'date' => $formattedDate,
+                        'image' => $newsItem['imageUrl'],
+                        'content' => $newsItem['content'],
+                        'views' => 0 // Asumsikan views diinisialisasi dengan 0
+                    ]);
+                }
+            }
+        }
 
-    // }
-    // public function fetchNews()
-    // {
-    //     try {
-    //         // Fetch data from the API
-    //         $response = Http::get('https://api-sahamin-puh-final.vercel.app/news');
-    //         $newsData = $response->json();
-
-    //         // Prepare the data for insertion
-    //         $newsToInsert = [];
-    //         foreach ($newsData as $news) {
-    //             $newsToInsert[] = [
-    //                 'image' => $news['imgSrc'],
-    //                 'title' => $news['title'],
-    //                 'description' => $news['content'],
-    //                 'category_id' => $this->determineCategoryId($news['title']),
-    //                 'url' => null,
-    //                 'created_at' => $news['date'],
-    //             ];
-    //         }
-
-    //         // Insert data into the database
-    //         DB::table('news')->insert($newsToInsert);
-    //     }
-    //     catch (\Exception $e) {
-    //         Log::error('Error fetching and storing stock news: ' . $e->getMessage());
-    //     }
-
-    // }
+        // Render berita yang diambil dari API
+        return view('news', ['news' => $newsData]);
+    }
 }

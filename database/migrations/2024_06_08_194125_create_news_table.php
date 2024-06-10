@@ -16,9 +16,8 @@ return new class extends Migration
                 $table->id();
                 $table->string('image');
                 $table->string('title');
-                $table->text('description');
-                $table->string('url'); // Tambah kolom url untuk link berita
-                $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
+                $table->text('content');
+                $table->string('date'); // Tambah kolom url untuk link berita
                 $table->unsignedInteger('views')->default(0); // Tambah kolom views untuk jumlah pengunjung dari berita
                 $table->timestamps();
             });

@@ -1,81 +1,27 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Berita') }}
-        </h2>
-    </x-slot> --}}
-
     <div class="py-12">
-        <div class="container">
-            <div class="card">
-                <div class="card-body">
-                    <!-- Group: Berita Teratas -->
-                    <div class="mb-8">
-                        <h3 class="h5">{{ __('Berita Teratas') }}</h3>
-                        @php
-                            $topNews = App\Models\News::selectRaw('*, DENSE_RANK() OVER (ORDER BY views DESC) as `rank`')->get();
-                            $topNewsChunks = $topNews->chunk(3);
-                        @endphp
-                        @foreach($topNewsChunks as $chunk)
-                            <div class="d-flex flex-row flex-wrap justify-content-between">
-                                @foreach($chunk as $news)
-                                    <a href="#" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
-                                        <div class="row g-0">
-                                            <div class="card-body" style="font-size: 14px; padding-top: 0; padding-bottom: 0; padding-left: 21px; font-weight: 400; color: #808080;">
-                                                <p class="card-text">{{ \Carbon\Carbon::parse($news->date)->locale('id')->diffForHumans() }}</p> <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
-                                            </div>
-                                        </div>
-                                        <div class="row g-0">
-                                            <div class="col-md-4" style="height: 80px; padding-left: 24px; padding-top: 15px;">
-                                                <img src="{{ $news->image }}" class="img-fluid rounded" alt="{{ $news->title }}" style="width: 72px; height: 72px;">
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title" style="font-size: 1.05rem;">{{ $news->title }}</h5>
-                                                    <p class="card-text text-truncate" style="font-size: 12px;">
-                                                        {{ trim(str_replace(['Bisnis.com, JAKARTA - ', 'Bisnis.com, JAKARTA -&nbsp;', 'Bisnis.com,&nbspJAKARTA - ;', 'Bisnis.com, JAKARTA&nbsp- ;','Bisnis.com,&nbspJAKARTA -&nbsp;'], '', $news->description)) }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Group: Berita FnB -->
-                    <div class="mb-8">
-                        <h3 class="h5">{{ __('Berita Pasar') }}</h3>
-                        {{-- Konten News Card Berdasarkan Kategori --}}
-                        @php
-                            $NewsCategory = App\Models\News::all();
-                            $NewsCategoryChunks = $NewsCategory->take(9)->chunk(3);
-                        @endphp
-                        @foreach($NewsCategoryChunks as $chunk)
-                            <div class="d-flex flex-row flex-wrap">
-                                @foreach($chunk as $news)
-                                <a href="{{ $news->url }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
-                                    <div class="row g-0">
-                                        <div class="card-body" style="font-size: 14px; padding-top: 0; padding-bottom: 0; padding-left: 21px; font-weight: 400; color: #808080;">
-                                            <p class="card-text">{{ \Carbon\Carbon::parse($news->date)->locale('id')->diffForHumans() }}</p> <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
-                                        </div>
-                                    </div>
-                                    <div class="row g-0">
-                                        <div class="col-md-4" style="height: 80px; padding-left: 24px; padding-top: 15px;">
-                                            <img src="{{ $news->image }}" class="img-fluid rounded" alt="{{ $news->title }}" style="width: 72px; height: 72px;">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body">
-                                                <h5 class="card-title" style="font-size: 1.05rem;">{{ $news->title }}</h5>
-                                                <p class="card-text text-truncate" style="font-size: 12px;">
-                                                    {{ trim(str_replace(['Bisnis.com, JAKARTA - ', 'Bisnis.com, JAKARTA -&nbsp;', 'Bisnis.com,&nbspJAKARTA - ;', 'Bisnis.com, JAKARTA&nbsp- ;','Bisnis.com,&nbspJAKARTA -&nbsp;'], '', $news->description)) }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                @endforeach
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h3 class="font-semibold text-xl text-gray-800 leading-tight">
+                        Berita Teratas
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+                        @foreach ($news as $newsItem)
+                            <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                                <img class="w-full" src="{{ $newsItem->image ?? $newsItem['imageUrl'] }}" alt="Gambar Berita">
+                                <div class="px-6 py-4">
+                                    <div class="font-bold text-xl mb-2">{{ $newsItem->title ?? $newsItem['title'] }}</div>
+                                    <p class="text-gray-700 text-base">
+                                        {{ Str::limit($newsItem->content ?? $newsItem['content'], 100) }}
+                                    </p>
+                                </div>
+                                <div class="px-6 pt-4 pb-2">
+                                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ $newsItem->date ?? $newsItem['date'] }}</span>
+                                    @if(isset($newsItem->views))
+                                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ $newsItem->views }} tampilan</span>
+                                    @endif
+                                </div>
                             </div>
                         @endforeach
                     </div>

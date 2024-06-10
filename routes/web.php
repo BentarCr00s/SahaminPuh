@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SecurePageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\SahamInfoController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -36,5 +37,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/news/{id}/{slug}', [NewsController::class, 'show'])->name('news.show');
+
+Route::post('/news/{news}/comments', [CommentController::class, 'store'])->middleware('auth');
+
+Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth');
 
 require __DIR__.'/auth.php';

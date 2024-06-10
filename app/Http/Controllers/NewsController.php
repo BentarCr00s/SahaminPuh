@@ -3,37 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use DateTime;
 
 class NewsController extends Controller
 {
     public function index()
     {
-        $newsItems = News::with('category')->get();
-        $categories = Category::all();
-        return view('news', compact('newsItems', 'categories'));
+        return $this->fetchNews();
     }
 
-    public function show($id)
+    public function fetchNews()
     {
-        $news = News::findOrFail($id);
-        return view('news.show', compact('news'));
+        // Ambil berita dari database terlebih dahulu
+        $newsFromDB = News::all();
+
+        // Render berita yang diambil dari database
+        if ($newsFromDB->isNotEmpty()) {
+            return view('news', ['news' => $newsFromDB]);
+        }
+
+        // Jika tidak ada berita di database, gunakan Http untuk mengambil data dari API
+        $url = 'https://api-sahamin-puh-final.vercel.app/news';
+        $response = Http::get($url);
+
+        // Mengubah response menjadi array asosiatif
+        $newsData = $response->json();
+
+        // Cek apakah tabel 'news' ada di database
+        if (Schema::hasTable('news')) {
+            // Simpan berita yang diambil dari API ke database
+            foreach ($newsData as $newsItem) {
+                // Cek apakah berita sudah ada di database berdasarkan judul atau kriteria unik lainnya
+                $existingNews = News::where('title', $newsItem['title'])->first();
+                if (!$existingNews) {
+                    // Format tanggal
+                    $dateString = $newsItem['date']; // Contoh: "Senin,10Juni2024|14:36"
+                    $dateTime = DateTime::createFromFormat('l,dF Y|H:i', $dateString);
+
+                    if ($dateTime) {
+                        $formattedDate = $dateTime->format('Y-m-d H:i:s');
+                    } else {
+                        // Jika format tanggal tidak sesuai, gunakan tanggal saat ini sebagai fallback
+                        $formattedDate = now();
+                    }
+
+                    News::create([
+                        'title' => $newsItem['title'],
+                        'date' => $formattedDate,
+                        'image' => $newsItem['imageUrl'],
+                        'content' => $newsItem['content'],
+                        'views' => 0 // Asumsikan views diinisialisasi dengan 0
+                    ]);
+                }
+            }
+        }
+
+        // Render berita yang diambil dari API
+        return view('news', ['news' => $newsData]);
     }
-    // public function store(Request $request)
-    // {
-    //     // Validasi data yang diterima dari formulir
-    //     $validatedData = $request->validate([
-    //         'category_id' => 'required',
-    //         // tambahkan validasi lainnya sesuai kebutuhan
-    //     ]);
-
-    //     // Simpan data ke dalam database
-    //     $news = new News();
-    //     $news->category_id = $validatedData['category_id'];
-    //     // tambahkan atribut lainnya sesuai kebutuhan
-    //     $news->save();
-
-    //     // Redirect atau berikan respons sesuai kebutuhan
-    // }
 }

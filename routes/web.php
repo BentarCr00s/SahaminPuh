@@ -13,7 +13,7 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/berita', [NewsController::class, 'index'])->name('news');
 
 Route::get('/sahaminfo', [SahamInfoController::class, 'index'])->name('sahaminfo');
 

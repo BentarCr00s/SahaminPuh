@@ -12,7 +12,7 @@
             <ul class="navbar-nav gap-2">
                 <li class="nav-item">
                     <x-nav-link :href="route('news')" :active="request()->routeIs('news') || request()->is('news/*')">
-                        {{ __('News') }}
+                        {{ __('Berita') }}
                     </x-nav-link>
                 </li>
                 <li class="nav-item">

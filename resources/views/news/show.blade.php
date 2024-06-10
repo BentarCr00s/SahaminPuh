@@ -1,6 +1,9 @@
 <head>
     <title>SahaminPuh | {{ $news->title }}</title>
 </head>
+@php
+    $news->increment('views');
+@endphp
 
 <x-app-layout>
     <div class="py-12">

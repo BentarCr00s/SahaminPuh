@@ -31,11 +31,14 @@
             .hover-bg-lightgray:hover {
                 background-color: #f8f9fa !important; /* Light gray color */
             }
+            .content{
+                background-color: #dbe9dcd5;
+            }
         </style>
         </head>
         <body>
             <header id="main-header"></header>
-            <main class="d-flex">
+            <main class="d-flex" style="height: 100vh;">
             <aside class="sidebar-menu-kalkulator">
                 <div class="menu-kalkulator-container p-3">
                     <ul class="menu-kalkulator list-group">
@@ -55,7 +58,7 @@
                 </div>
             </aside>
                 <div class="content-container p-3">
-                    <div class="content hitungProfit-container">
+                    <div class="content hitungProfit-container p-3 rounded">
                         <div class="container">
                             <h1 class="text-center">CAPITAL GAINS</h1>
                             <p class="text-center">Hitung profit anda di sini.</p>
@@ -101,7 +104,7 @@
                         </div>
                     </div>
 
-                    <div class="content averageSaham-container d-none">
+                    <div class="content averageSaham-container d-none p-3 rounded">
                         <div class="container">
                             <h1 class="text-center">AVERAGE SAHAM</h1>
                             <p class="text-center">Hitung average saham anda di sini.</p>
@@ -136,7 +139,7 @@
                     </div>
 
 
-                    <div class="content marginSafety-container d-none">
+                    <div class="content marginSafety-container d-none p-3 rounded">
                         <div class="container">
                             <h1 class="text-center">MARGIN OF SAFETY SAHAM</h1>
                             <p class="text-center">Hitung margin of safety saham anda di sini.</p>
@@ -171,7 +174,7 @@
                         </div>
                     </div>
 
-                    <div class="content hargaWajar-container d-none">
+                    <div class="content hargaWajar-container d-none p-3 rounded">
                         <div class="container">
                             <h1 class="text-center">HARGA WAJAR SAHAM</h1>
                             <p class="text-center">Hitung harga wajar saham anda di sini.</p>

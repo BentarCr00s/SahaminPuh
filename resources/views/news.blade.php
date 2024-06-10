@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\DB;
                                 <a href="{{ url('news/' . $news->id . '/' . Str::slug($news->title)) }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
                                     <div class="row g-0">
                                         <div class="card-body" style="font-size: 14px; padding-top: 0; padding-bottom: 0; padding-left: 21px; font-weight: 400; color: #808080;">
-                                            <p class="card-text">{{ \Carbon\Carbon::parse($news->date)->locale('id')->diffForHumans() }}</p> <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
+                                            <p class="card-text">{{ \Carbon\Carbon::parse($news->date)->locale('id')->diffForHumans() }}</p>
+                                            <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
                                         </div>
                                     </div>
                                     <div class="row g-0">

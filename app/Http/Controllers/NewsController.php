@@ -66,4 +66,10 @@ class NewsController extends Controller
         // Render berita yang diambil dari API
         return view('news', ['news' => $newsData]);
     }
+
+    public function show($id)
+    {
+        $news = News::findOrFail($id);
+        return view('news.show', compact('news'));
+    }
 }

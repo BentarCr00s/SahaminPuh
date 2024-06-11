@@ -52,6 +52,16 @@
                                                         <small>reply to {{ $comment->comment_id->user->name }}</small>
                                                     @endif
                                                     <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                                    <div>
+                                                        <form action="{{ route('comments.like', $comment->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm btn-primary">Like ({{ $comment->likes_count }})</button>
+                                                        </form>
+                                                        <form action="{{ route('comments.dislike', $comment->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm btn-danger">Dislike ({{ $comment->dislikes_count }})</button>
+                                                        </form>
+                                                    </div>
                                                     @if(auth()->check() && (auth()->user()->can('update', $comment) || auth()->user()->can('delete', $comment)))
                                                         <div class="dropdown">
                                                             <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -97,23 +107,6 @@
                                                 @else
                                                     <p>Please <a href="{{ route('login') }}">login</a> to comment.</p>
                                                 @endauth
-                                            </div>
-                                            <div class="mb-2 d-flex justify-content-between align-items-start">
-                                                <div>
-                                                    <strong>{{ $comment->user->name }}</strong> said:
-                                                    <p>{{ $comment->content }}</p>
-                                                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                                                </div>
-                                                <div>
-                                                    <form action="{{ route('comments.like', $comment->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-primary">Like ({{ $comment->likes_count }})</button>
-                                                    </form>
-                                                    <form action="{{ route('comments.dislike', $comment->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-danger">Dislike ({{ $comment->dislikes_count }})</button>
-                                                    </form>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

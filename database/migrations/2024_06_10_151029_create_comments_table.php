@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('content');
             $table->boolean('is_reply')->default(false);
             $table->foreignId('comment_id')->nullable()->constrained('comments')->onDelete('cascade');
+            $table->integer('likes_count')->default(0);
+            $table->integer('dislikes_count')->default(0);
             $table->timestamps();
         });
     }
@@ -28,5 +30,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('comments');
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropColumn('likes_count');
+            $table->dropColumn('dislikes_count');
+        });
     }
 };

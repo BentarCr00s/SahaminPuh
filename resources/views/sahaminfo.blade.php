@@ -166,7 +166,7 @@
         <div class="tradingview-widget-container__widget"></div>
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
         {
-        "symbol": "IDX:{{ $symbol }}",
+        "symbol": "{{ $symbol == 'AMZN' ? 'NASDAQ:AMZN' : 'IDX:' . $symbol }}",
         "width": "100%",
         "locale": "id",
         "colorTheme": "light",
@@ -183,6 +183,9 @@
                                             <ul>
                                                 <li>Total Pendapatan: {{ $info['Penjelasan_dari_Data_Laporan_Keuangan']['Total_Pendapatan'] }}</li>
                                                 <li>Pertumbuhan Pendapatan: {{ $info['Penjelasan_dari_Data_Laporan_Keuangan']['Pertumbuhan_Pendapatan'] }}</li>
+                                                @if(isset($info['Penjelasan_dari_Data_Laporan_Keuangan']['Net_Income_After_Tax']))
+                                                    <li>Laba Bersih setelah pajak: {{ $info['Penjelasan_dari_Data_Laporan_Keuangan']['Net_Income_After_Tax'] }}</li>
+                                                @endif
                                             </ul>
 
                                             <h5>Penjelasan dari Data Statistik dan Rasio Keuangan</h5>
@@ -192,6 +195,9 @@
                                                 <li>Return on Assets: {{ $info['Penjelasan_dari_Data_Statistik_dan_Rasio_Keuangan']['Return_on_Assets'] }}</li>
                                                 <li>Return on Equity: {{ $info['Penjelasan_dari_Data_Statistik_dan_Rasio_Keuangan']['Return_on_Equity'] }}</li>
                                                 <li>Debt to Equity Ratio: {{ $info['Penjelasan_dari_Data_Statistik_dan_Rasio_Keuangan']['Debt_to_Equity_Ratio'] }}</li>
+                                                @if(isset($info['Penjelasan_dari_Data_Statistik_dan_Rasio_Keuangan']['Total_Assets']))
+                                                    <li>Total Aset: {{ $info['Penjelasan_dari_Data_Statistik_dan_Rasio_Keuangan']['Total_Assets'] }}</li>
+                                                @endif
                                             </ul>
 
                                             <h5>Penjelasan dari Data Dividen Keuangan</h5>

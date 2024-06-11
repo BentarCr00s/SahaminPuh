@@ -11,18 +11,22 @@ class CommentController extends Controller
 {
     use AuthorizesRequests;
 
-    public function store(Request $request, News $news)
+    public function store(Request $request, $newsId)
     {
         $request->validate([
-            'content' => 'required',
+            'content' => 'required|string',
+            'parent_id' => 'nullable|exists:comments,id'
         ]);
 
-        $news->comments()->create([
-            'user_id' => auth()->id(),
-            'content' => $request->content,
-        ]);
+        $comment = new Comment();
+        $comment->news_id = $newsId;
+        $comment->user_id = auth()->id();
+        $comment->content = $request->input('content');
+        $comment->is_reply = $request->has('parent_id');
+        $comment->comment_id = $request->input('parent_id');
+        $comment->save();
 
-        return back();
+        return redirect()->back()->with('success', 'Comment added successfully!');
     }
 
     public function update(Request $request, Comment $comment)

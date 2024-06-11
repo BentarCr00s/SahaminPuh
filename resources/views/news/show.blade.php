@@ -39,72 +39,120 @@
                             @endauth
                             <hr>
                             @php
-                                $comments = $news->comments()->paginate(5);
+                                $comments = $news->comments()->whereNull('comment_id')->with('replies')->paginate(10);
                             @endphp
                             @foreach($comments as $comment)
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="d-flex flex-start">
-                                            <div class="flex-grow-1 flex-shrink-1">
-                                                @if(!$comment->is_reply)
-                                                <div>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <strong class="mb-1">{{ $comment->user->name }}</strong>
-                                                        @if ($comment->is_reply)
-                                                            <small>reply to {{ $comment->comment_id->user->name }}</small>
-                                                        @endif<small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                                                        @if(auth()->check() && (auth()->user()->can('update', $comment) || auth()->user()->can('delete', $comment)))
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    ...
-                                                                </button>
-                                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                    @can('update', $comment)
-                                                                        <li>
-                                                                            <form action="{{ url('comments/' . $comment->id) }}" method="POST" class="px-3 py-1">
-                                                                                @csrf
-                                                                                @method('PATCH')
-                                                                                <textarea name="content" class="form-control mb-2" rows="1" required>{{ $comment->content }}</textarea>
-                                                                                <button type="submit" class="btn btn-sm btn-secondary">Update</button>
-                                                                            </form>
-                                                                        </li>
-                                                                    @endcan
-                                                                    @can('delete', $comment)
-                                                                        <li>
-                                                                            <form action="{{ url('comments/' . $comment->id) }}" method="POST" class="px-3 py-1">
-                                                                                @csrf
-                                                                                @method('DELETE')
-                                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                                            </form>
-                                                                        </li>
-                                                                    @endcan
-                                                                </ul>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <p class="small mb-0">{{ $comment->content }}</p>
-                                                    <div class="col-span-2 flex justify-end items-center">
-                                                        <button id="replyButton{{ $comment->id }}" class="btn btn-sm btn-primary" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
-                                                    </div>
-                                                    @auth
-                                                        <form id="replyForm{{ $comment->id }}" action="{{ url('news/' . $news->id . '/comments') }}" method="POST" style="display: none;">
-                                                            @csrf
-                                                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                                            <div class="mb-3">
-                                                                <textarea name="content" class="form-control" rows="3" required></textarea>
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary">Add Reply</button>
-                                                        </form>
-                                                    @else
-                                                        <p>Please <a href="{{ route('login') }}">login</a> to comment.</p>
-                                                    @endauth
+                                <div style="margin-left: {{ $comment->is_reply ? '20px' : '0' }};">
+                                    <div class="d-flex flex-start">
+                                        <div class="flex-grow-1 flex-shrink-1">
+                                            <div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <strong class="mb-1">{{ $comment->user->name }}</strong>
+                                                    @if ($comment->is_reply)
+                                                        <small>reply to {{ $comment->comment_id->user->name }}</small>
+                                                    @endif
+                                                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                                    @if(auth()->check() && (auth()->user()->can('update', $comment) || auth()->user()->can('delete', $comment)))
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                ...
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                @can('update', $comment)
+                                                                    <li>
+                                                                        <form action="{{ url('comments/' . $comment->id) }}" method="POST" class="px-3 py-1">
+                                                                            @csrf
+                                                                            @method('PATCH')
+                                                                            <textarea name="content" class="form-control mb-2" rows="1" required>{{ $comment->content }}</textarea>
+                                                                            <button type="submit" class="btn btn-sm btn-secondary">Update</button>
+                                                                        </form>
+                                                                    </li>
+                                                                @endcan
+                                                                @can('delete', $comment)
+                                                                    <li>
+                                                                        <form action="{{ url('comments/' . $comment->id) }}" method="POST" class="px-3 py-1">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                                        </form>
+                                                                    </li>
+                                                                @endcan
+                                                            </ul>
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                                @endif
+                                                <p class="small mb-0">{{ $comment->content }}</p>
+                                                <div class="col-span-2 flex justify-end items-center">
+                                                    <button id="replyButton{{ $comment->id }}" class="btn btn-sm btn-primary" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
+                                                </div>
+                                                @auth
+                                                    <form id="replyForm{{ $comment->id }}" action="{{ url('news/' . $news->id . '/comments') }}" method="POST" style="display: none;">
+                                                        @csrf
+                                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                                        <div class="mb-3">
+                                                            <textarea name="content" class="form-control" rows="3" required></textarea>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Add Reply</button>
+                                                    </form>
+                                                @else
+                                                    <p>Please <a href="{{ route('login') }}">login</a> to comment.</p>
+                                                @endauth
                                             </div>
                                         </div>
                                     </div>
+                                    <div>
+                                        @if($comment->replies)
+                                        @foreach($comment->replies as $reply)
+                                            <div style="margin-left: 20px;">
+                                                <div class="d-flex flex-start">
+                                                    <div class="flex-grow-1 flex-shrink-1">
+                                                        <div>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <strong class="mb-1">{{ $reply->user->name }}</strong>
+                                                                <small class="text-muted">{{ $reply->created_at->diffForHumans() }}</small>
+                                                                @if(auth()->check() && (auth()->user()->can('update', $reply) || auth()->user()->can('delete', $reply)))
+                                                                    <div class="dropdown">
+                                                                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                            ...
+                                                                        </button>
+                                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                            @can('update', $reply)
+                                                                                <li>
+                                                                                    <form action="{{ url('comments/' . $reply->id) }}" method="POST" class="px-3 py-1">
+                                                                                        @csrf
+                                                                                        @method('PATCH')
+                                                                                        <textarea name="content" class="form-control mb-2" rows="1" required>{{ $reply->content }}</textarea>
+                                                                                        <button type="submit" class="btn btn-sm btn-secondary">Update</button>
+                                                                                    </form>
+                                                                                </li>
+                                                                            @endcan
+                                                                            @can('delete', $reply)
+                                                                                <li>
+                                                                                    <form action="{{ url('comments/' . $reply->id) }}" method="POST" class="px-3 py-1">
+                                                                                        @csrf
+                                                                                        @method('DELETE')
+                                                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                                                    </form>
+                                                                                </li>
+                                                                            @endcan
+                                                                        </ul>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <p class="small mb-0">{{ $reply->content }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
-                            @endforeach
+                            </div>
+                        @endforeach
+
+                        <div class="d-flex justify-content-center">
+                            {{ $comments->links('pagination::bootstrap-4') }}
+                        </div>
                             <div class="d-flex justify-content-center">
                                 {{ $comments->links('pagination::bootstrap-4') }}
                             </div>

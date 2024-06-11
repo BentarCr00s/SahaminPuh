@@ -3,17 +3,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 @endphp
 <x-app-layout>
-    <div class="news-landing-header" style="margin-bottom: 5vh; margin-top: 9vh;">
-        <div class="title-container" style="color: #131722; display: grid; justify-items: center; margin: 0 auto; max-width: 960px; text-align: center;">
-            <h1 class="title-news" style="padding-bottom: 0; margin: 0; padding: 0; font-size: 56px; line-height: 56px;">Berita</h1>
-            <p class="description-title" style="padding-top: 1rem; margin: 0; font-size: 24px; line-height: 32px;">
-                Jangan lewatkan informasi terbaru secara global.
-            </p>
-        </div>
-    </div>
     <div class="py-12">
         <div class="container">
-            <div class="card" style="border-color: white;">
+            <div class="card">
                 <div class="card-body">
                     <!-- Group: Berita Teratas -->
                     <div class="mb-8" style="padding-top: 20px;">
@@ -28,8 +20,7 @@ use Illuminate\Support\Facades\DB;
                                 <a href="{{ url('news/' . $news->id . '/' . Str::slug($news->title)) }}" class="card mb-3" style="flex: 1 0 21%; margin: 5px; padding: 10px; text-decoration: none;">
                                     <div class="row g-0">
                                         <div class="card-body" style="font-size: 14px; padding-top: 0; padding-bottom: 0; padding-left: 21px; font-weight: 400; color: #808080;">
-                                            <p class="card-text">{{ \Carbon\Carbon::parse($news->date)->locale('id')->diffForHumans() }}</p>
-                                            <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
+                                            <p class="card-text">{{ \Carbon\Carbon::parse($news->date)->locale('id')->diffForHumans() }}</p> <!-- Tanggal berita dipindahkan di atas sebagai judul hanya menunjukkan jarak terbit dari hari ini -->
                                         </div>
                                     </div>
                                     <div class="row g-0">

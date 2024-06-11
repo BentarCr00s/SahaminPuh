@@ -15,7 +15,7 @@ Route::get('/', function () {
 
 Route::get('/berita', [NewsController::class, 'index'])->name('news');
 
-Route::get('/sahaminfo', [SahamInfoController::class, 'index'])->name('sahaminfo');
+Route::get('/sahaminfo', [SahamInfoController::class, 'index'])->middleware('auth', 'verified')->name('sahaminfo');
 
 
 Route::get('/tentang', function () {
@@ -39,7 +39,6 @@ Route::middleware('auth')->group(function () {
 Route::get('/news/{id}/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::post('/news/{news}/comments', [CommentController::class, 'store'])->middleware('auth');
-
 Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth');
 

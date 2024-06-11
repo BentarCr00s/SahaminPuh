@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav gap-2">
                 <li class="nav-item">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard') || request()->is('news/*')">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard') || request()->is('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </li>

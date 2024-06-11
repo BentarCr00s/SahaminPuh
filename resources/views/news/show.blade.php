@@ -32,10 +32,10 @@
                                     <div class="mb-3">
                                         <textarea name="content" class="form-control" rows="3" required></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                                    <button type="submit" class="btn btn-primary">Tambah Komen</button>
                                 </form>
                             @else
-                                <p>Please <a href="{{ route('login') }}">login</a> to comment.</p>
+                                <p>Please <a href="{{ route('login') }}">login</a> untuk komen.</p>
                             @endauth
                             <hr>
                             @php
@@ -93,7 +93,7 @@
                                                 </div>
                                                 <p class="small mb-0">{{ $comment->content }}</p>
                                                 <div class="col-span-2 flex justify-end items-center">
-                                                    <button id="replyButton{{ $comment->id }}" class="btn btn-sm btn-primary" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
+                                                    <button id="replyButton{{ $comment->id }}" class="btn btn-sm btn-primary" onclick="toggleReplyForm({{ $comment->id }})">Balas</button>
                                                 </div>
                                                 @auth
                                                     <form id="replyForm{{ $comment->id }}" action="{{ url('news/' . $news->id . '/comments') }}" method="POST" style="display: none;">
@@ -102,10 +102,10 @@
                                                         <div class="mb-3">
                                                             <textarea name="content" class="form-control" rows="3" required></textarea>
                                                         </div>
-                                                        <button type="submit" class="btn btn-primary">Add Reply</button>
+                                                        <button type="submit" class="btn btn-primary">Balas</button>
                                                     </form>
                                                 @else
-                                                    <p>Please <a href="{{ route('login') }}">login</a> to comment.</p>
+                                                    <p>Please <a href="{{ route('login') }}">login</a> untuk balas.</p>
                                                 @endauth
                                             </div>
                                         </div>

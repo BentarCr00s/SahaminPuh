@@ -6,6 +6,12 @@
         </div>
     @endif
 
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -38,11 +44,7 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
-            @if (Route::has('password.request'))
-                <a class="text-decoration-none" href="{{ route('password.request') }}">
-                    {{ __('Lupa kata sandi?') }}
-                </a>
-            @endif
+
             @if (Route::has('register'))
                 <a class="text-decoration-none" href="{{ route('register') }}">
                     {{ __('Buat akun') }}

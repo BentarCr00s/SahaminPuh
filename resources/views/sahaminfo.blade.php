@@ -149,118 +149,32 @@
 
                     </div>
                 </div>
+                <h1 class="text-2xl font-bold">REKOMENDASI SAHAM</h1>
                 <div class="py-12">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                             <div class="p-6 text-gray-900 dark:text-gray-100">
-                                <div class="tweeter-sentiment p-3">
-                                    <h3>Sentiment Analaysis X</h3>
-                                    <div class="sentiment-container p-3">
-                                        <div class="tweeter-sentiment-container p-3">
-                                        <h4>Menurut Sentiment Analaysis X Untuk Saham BBCA</h4>
-                                        <h4>15 % Di Akhir Tahun Ini</h4>
-                                        </div>
-                                        <!-- TradingView Widget BEGIN -->
-                                        <div class="tradingview-widget-container p-3">
-                                        <div class="tradingview-widget-container__widget"></div>
-
-                                        <script
-                                            type="text/javascript"
-                                            src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js"
-                                            async>
-                                            {
-                                            "symbol": "IDX:BBCA",
-                                            "width": "100%",
-                                            "isTransparent": false,
-                                            "colorTheme": "light",
-                                            "locale": "en"
-                                            }
-                                        </script>
-                                        </div>
-                                        <!-- TradingView Widget END -->
-                                    </div>
-                                    <div class="sentiment-container p-3">
-                                        <div class="tweeter-sentiment-container p-3">
-                                        <h4>Menurut Sentiment Analaysis X Untuk Saham BBRI</h4>
-                                        <h4>10 % Di Akhir Tahun Ini</h4>
-                                        </div>
-                                        <!-- TradingView Widget BEGIN -->
-                                        <div class="tradingview-widget-container p-3">
-                                        <div class="tradingview-widget-container__widget"></div>
-
-                                        <script
-                                            type="text/javascript"
-                                            src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js"
-                                            async>
-                                            {
-                                            "symbol": "IDX:BBRI",
-                                            "width": "100%",
-                                            "isTransparent": false,
-                                            "colorTheme": "light",
-                                            "locale": "en"
-                                            }
-                                        </script>
-                                        </div>
-                                    <!-- TradingView Widget END -->
-                                    <div class="sentiment-container p-3" style="display: flex;">          </div>
-
-                                        <div class="tweeter-sentiment-container p-3">
-                                        <h4>Menurut Sentiment Analaysis X Untuk Saham TLKM</h4>
-                                        <h4>15 % Di Akhir Tahun Ini</h4>
-                                        </div>
-                                        <!-- TradingView Widget BEGIN -->
-                                        <div class="tradingview-widget-container p-3">
-                                        <div class="tradingview-widget-container__widget"></div>
-
-                                        <script
-                                            type="text/javascript"
-                                            src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js"
-                                            async>
-                                            {
-                                            "symbol": "IDX:TLKM",
-                                            "width": "100%",
-                                            "isTransparent": false,
-                                            "colorTheme": "light",
-                                            "locale": "en"
-                                            }
-                                        </script>
-                                        </div>
-                                        <!-- TradingView Widget END -->
-                                    </div>
-                                    <div class="sentiment-container p-3">
-                                        <div class="tweeter-sentiment-container p-3">
-                                        <h4>Menurut Sentiment Analaysis X Untuk Saham BBNI</h4>
-                                        <h4>15 % Di Akhir Tahun Ini</h4>
-                                        </div>
-                                        <!-- TradingView Widget BEGIN -->
-                                        <div class="tradingview-widget-container p-3">
-                                        <div class="tradingview-widget-container__widget"></div>
-
-                                        <script
-                                            type="text/javascript"
-                                            src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js"
-                                            async>
-                                            {
-                                            "symbol": "IDX:BBNI",
-                                            "width": "100%",
-                                            "isTransparent": false,
-                                            "colorTheme": "light",
-                                            "locale": "en"
-                                            }
-                                        </script>
-                                        </div>
-                                        <!-- TradingView Widget END -->
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="py-12">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 text-gray-900 dark:text-gray-100">
+                                <div id="symbol-bar">
+                                    @foreach($sahamInfo as $symbol => $info)
+                                        <button class="symbol-button rounded-full border border-gray-300 px-4 py-2 m-2" data-symbol="{{ $symbol }}">{{ $symbol }}</button>
+                                    @endforeach
+                                </div>
                                 @foreach($sahamInfo as $symbol => $info)
-                                    <div class="card mb-4">
+                                <div class="card mb-4 symbol-info" id="info-{{ $symbol }}" style="display: none;">
+                                        <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+        {
+        "symbol": "IDX:{{ $symbol }}",
+        "width": "100%",
+        "locale": "id",
+        "colorTheme": "light",
+        "isTransparent": false
+      }
+        </script>
+      </div>
+      <!-- TradingView Widget END -->
                                         <div class="card-header">
                                             <h3>{{ $symbol }}</h3>
                                         </div>
@@ -303,5 +217,14 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                    $(document).ready(function() {
+                        $('.symbol-button').on('click', function() {
+                            var symbol = $(this).data('symbol');
+                            $('.symbol-info').hide();
+                            $('#info-' + symbol).show();
+                        });
+                    });
+                </script>
         </x-slot>
     </x-app-layout>

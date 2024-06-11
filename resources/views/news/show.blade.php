@@ -1,9 +1,6 @@
 <head>
     <title>SahaminPuh | {{ $news->title }}</title>
 </head>
-@php
-    $news->increment('views');
-@endphp
 
 <x-app-layout>
     <div class="py-12">
@@ -31,14 +28,14 @@
                                     <div class="mb-3">
                                         <textarea name="content" class="form-control" rows="3" required></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                                    <button type="submit" class="btn btn-primary"> Tambah Comment</button>
                                 </form>
                             @else
                                 <p>Please <a href="{{ route('login') }}">login</a> to comment.</p>
                             @endauth
                             <hr>
                             @php
-                                $comments = $news->comments()->paginate(5);
+                                $comments = $news->comments()->orderBy('created_at', 'desc')->paginate(5);
                             @endphp
                             @foreach($comments as $comment)
                                 <div class="mb-2 d-flex justify-content-between align-items-start">
@@ -101,7 +98,7 @@
                                                 </div>
                                                 <div class="col-md-8">
                                                     <div class="card-body">
-                                                        <h5 class="card-title">{{ $news->title }}</h5>
+                                                        <h6 class="card-title">{{ $news->title }}</h6>
                                                         <p class="card-text text-truncate">{{ $news->content }}</p>
                                                     </div>
                                                 </div>

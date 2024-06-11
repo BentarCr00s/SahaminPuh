@@ -16,18 +16,18 @@ $(document).ready(function () {
     });
 });
 
-document.getElementById('resultAvg').addEventListener('click', function() {
+document.getElementById("resultAvg").addEventListener("click", function () {
     // Mendapatkan nilai dari input
-    let hargaSaham1 = document.getElementById('hargaSaham1').value;
-    let jumlahLot1 = document.getElementById('jumlahLot1').value;
-    let hargaSaham2 = document.getElementById('hargaSaham2').value;
-    let jumlahLot2 = document.getElementById('jumlahLot2').value;
-    let hargaSaham3 = document.getElementById('hargaSaham3').value;
-    let jumlahLot3 = document.getElementById('jumlahLot3').value;
+    let hargaSaham1 = document.getElementById("hargaSaham1").value;
+    let jumlahLot1 = document.getElementById("jumlahLot1").value;
+    let hargaSaham2 = document.getElementById("hargaSaham2").value;
+    let jumlahLot2 = document.getElementById("jumlahLot2").value;
+    let hargaSaham3 = document.getElementById("hargaSaham3").value;
+    let jumlahLot3 = document.getElementById("jumlahLot3").value;
 
     // Validasi input
-    if (hargaSaham1 === '' || jumlahLot1 === '') {
-        alert('Harap masukkan nilai untuk pembelian saham pertama.');
+    if (hargaSaham1 === "" || jumlahLot1 === "") {
+        alert("Harap masukkan nilai untuk pembelian saham pertama.");
         return;
     }
 
@@ -36,7 +36,7 @@ document.getElementById('resultAvg').addEventListener('click', function() {
     jumlahLot1 = parseFloat(jumlahLot1);
 
     if (isNaN(hargaSaham1) || isNaN(jumlahLot1)) {
-        alert('Harap masukkan angka yang valid untuk pembelian saham pertama.');
+        alert("Harap masukkan angka yang valid untuk pembelian saham pertama.");
         return;
     }
 
@@ -46,13 +46,19 @@ document.getElementById('resultAvg').addEventListener('click', function() {
     hargaSaham3 = hargaSaham3 ? parseFloat(hargaSaham3) : 0;
     jumlahLot3 = jumlahLot3 ? parseFloat(jumlahLot3) : 0;
 
-    if ((hargaSaham2 && isNaN(hargaSaham2)) || (jumlahLot2 && isNaN(jumlahLot2))) {
-        alert('Harap masukkan angka yang valid untuk pembelian saham kedua.');
+    if (
+        (hargaSaham2 && isNaN(hargaSaham2)) ||
+        (jumlahLot2 && isNaN(jumlahLot2))
+    ) {
+        alert("Harap masukkan angka yang valid untuk pembelian saham kedua.");
         return;
     }
 
-    if ((hargaSaham3 && isNaN(hargaSaham3)) || (jumlahLot3 && isNaN(jumlahLot3))) {
-        alert('Harap masukkan angka yang valid untuk pembelian saham ketiga.');
+    if (
+        (hargaSaham3 && isNaN(hargaSaham3)) ||
+        (jumlahLot3 && isNaN(jumlahLot3))
+    ) {
+        alert("Harap masukkan angka yang valid untuk pembelian saham ketiga.");
         return;
     }
 
@@ -72,21 +78,20 @@ document.getElementById('resultAvg').addEventListener('click', function() {
     let average = totalBiaya / totalLembar;
 
     // Menampilkan hasil
-    document.getElementById('avgresult').textContent = average.toFixed(2);
+    document.getElementById("avgresult").textContent = average.toFixed(2);
 });
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Ambil elemen input untuk perhitungan DDM dan harga saham
-    var dpsInput = document.getElementById('dps');
-    var growthRateInput = document.getElementById('growthRate');
-    var requiredReturnInput = document.getElementById('requiredReturn');
-    var stockPriceInput = document.getElementById('stockPrice');
-    var calculateButton = document.getElementById('resultMargin');
-    var marginResultSpan = document.getElementById('marginresult');
+    var dpsInput = document.getElementById("dps");
+    var growthRateInput = document.getElementById("growthRate");
+    var requiredReturnInput = document.getElementById("requiredReturn");
+    var stockPriceInput = document.getElementById("stockPrice");
+    var calculateButton = document.getElementById("resultMargin");
+    var marginResultSpan = document.getElementById("marginresult");
 
     // Tambahkan event listener untuk tombol hitung
-    calculateButton.addEventListener('click', calculateMarginOfSafety);
+    calculateButton.addEventListener("click", calculateMarginOfSafety);
 
     function calculateMarginOfSafety() {
         // Ambil nilai dari input
@@ -96,13 +101,22 @@ document.addEventListener('DOMContentLoaded', function() {
         var stockPrice = parseFloat(stockPriceInput.value);
 
         // Validasi input
-        if (isNaN(dps) || isNaN(growthRate) || isNaN(requiredReturn) || isNaN(stockPrice)) {
-            displayMarginOfSafetyResult('Harap masukkan angka yang valid untuk semua input.');
+        if (
+            isNaN(dps) ||
+            isNaN(growthRate) ||
+            isNaN(requiredReturn) ||
+            isNaN(stockPrice)
+        ) {
+            displayMarginOfSafetyResult(
+                "Harap masukkan angka yang valid untuk semua input."
+            );
             return;
         }
 
         if (requiredReturn <= growthRate) {
-            displayMarginOfSafetyResult('Tingkat pengembalian yang diharapkan harus lebih besar dari tingkat pertumbuhan dividen.');
+            displayMarginOfSafetyResult(
+                "Tingkat pengembalian yang diharapkan harus lebih besar dari tingkat pertumbuhan dividen."
+            );
             return;
         }
 
@@ -110,7 +124,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var intrinsicValue = dps / (requiredReturn - growthRate);
 
         // Hitung Margin of Safety
-        var marginOfSafety = ((intrinsicValue - stockPrice) / intrinsicValue) * 100;
+        var marginOfSafety =
+            ((intrinsicValue - stockPrice) / intrinsicValue) * 100;
 
         // Tampilkan hasil
         displayMarginOfSafetyResult(marginOfSafety.toFixed(2) + "%");
@@ -122,58 +137,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('resultIntrinsik').addEventListener('click', function() {
-    // Ambil nilai dari input
-    let netIncome = parseFloat(document.getElementById('netIncome').value);
-    let outstandingShares = parseFloat(document.getElementById('outstandingShares').value);
-    let currentStockPrice = parseFloat(document.getElementById('currentStockPrice').value);
+document
+    .getElementById("resultIntrinsik")
+    .addEventListener("click", function () {
+        // Ambil nilai dari input
+        let netIncome = parseFloat(document.getElementById("netIncome").value);
+        let outstandingShares = parseFloat(
+            document.getElementById("outstandingShares").value
+        );
+        let currentStockPrice = parseFloat(
+            document.getElementById("currentStockPrice").value
+        );
 
-    // Validasi input
-    if (isNaN(netIncome) || isNaN(outstandingShares) || isNaN(currentStockPrice)) {
-        alert('Harap masukkan angka yang valid untuk semua input.');
-        return;
-    }
+        // Validasi input
+        if (
+            isNaN(netIncome) ||
+            isNaN(outstandingShares) ||
+            isNaN(currentStockPrice)
+        ) {
+            alert("Harap masukkan angka yang valid untuk semua input.");
+            return;
+        }
 
-    // Hitung EPS (Earnings Per Share)
-    let eps = netIncome / outstandingShares;
+        // Hitung EPS (Earnings Per Share)
+        let eps = netIncome / outstandingShares;
 
-    // Hitung P/E Ratio
-    let peRatio = currentStockPrice / eps;
+        // Hitung P/E Ratio
+        let peRatio = currentStockPrice / eps;
 
-    // Hitung harga wajar saham (WPS)
-    let wps = eps * currentStockPrice;
+        // Hitung harga wajar saham (WPS)
+        let wps = eps * currentStockPrice;
 
-    // Tampilkan hasil
-    document.getElementById('epsResult').textContent = eps.toFixed(2);
-    document.getElementById('peRatioResult').textContent = peRatio.toFixed(2);
-    document.getElementById('hargaWajarResult').textContent = wps.toFixed(2);
-});
+        // Tampilkan hasil
+        document.getElementById("epsResult").textContent = eps.toFixed(2);
+        document.getElementById("peRatioResult").textContent =
+            peRatio.toFixed(2);
+        document.getElementById("hargaWajarResult").textContent =
+            wps.toFixed(2);
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const menuItems = document.querySelectorAll('.menu-item');
-    const contentSections = document.querySelectorAll('.content');
+document.addEventListener("DOMContentLoaded", function () {
+    const menuItems = document.querySelectorAll(".menu-item");
+    const contentSections = document.querySelectorAll(".content");
 
-    menuItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const target = this.getAttribute('data-target');
-            
+    menuItems.forEach((item) => {
+        item.addEventListener("click", function () {
+            const target = this.getAttribute("data-target");
+
             // Sembunyikan semua bagian konten
-            contentSections.forEach(section => {
-                section.style.display = 'none';
+            contentSections.forEach((section) => {
+                section.style.display = "none";
             });
 
             // Tampilkan bagian konten yang dipilih
             const targetElement = document.querySelector(target);
             if (targetElement) {
-                targetElement.style.display = 'block';
+                targetElement.style.display = "block";
             }
         });
     });
 
     // Tampilkan halaman pertama secara default
-    const firstContentSection = document.querySelector('.hitungProfit-container');
+    const firstContentSection = document.querySelector(
+        ".hitungProfit-container"
+    );
     if (firstContentSection) {
-        firstContentSection.style.display = 'block';
+        firstContentSection.style.display = "block";
     }
 });
-

@@ -42,4 +42,7 @@ Route::post('/news/{news}/comments', [CommentController::class, 'store'])->middl
 Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth');
 
+Route::post('comments/{comment}/like', [CommentController::class, 'like'])->name('comments.like');
+Route::post('comments/{comment}/dislike', [CommentController::class, 'dislike'])->name('comments.dislike');
+
 require __DIR__.'/auth.php';

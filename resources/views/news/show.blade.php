@@ -44,6 +44,16 @@
                                         <p>{{ $comment->content }}</p>
                                         <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
                                     </div>
+                                    <div>
+                                        <form action="{{ route('comments.like', $comment->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-primary">Like ({{ $comment->likes_count }})</button>
+                                        </form>
+                                        <form action="{{ route('comments.dislike', $comment->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-danger">Dislike ({{ $comment->dislikes_count }})</button>
+                                        </form>
+                                    </div>
                                     @if(auth()->check() && (auth()->user()->can('update', $comment) || auth()->user()->can('delete', $comment)))
                                         <div class="dropdown">
                                             <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

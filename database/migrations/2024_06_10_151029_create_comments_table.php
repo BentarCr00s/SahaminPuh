@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('news_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('content');
+            $table->boolean('is_reply')->default(false);
+            $table->foreignId('comment_id')->nullable()->constrained('comments')->onDelete('cascade');
             $table->timestamps();
         });
     }
